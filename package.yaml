@@ -1,0 +1,72 @@
+name:               storable-grid
+version:            0.1.0.0
+author:             phlummox
+maintainer:         hs-storable-grid@phlummox.dev
+copyright:          2021 phlummox
+license:            BSD2
+github:             phlummox/hs-storable-grid
+
+synopsis:           Contiguous blocks of Storables, represented as a Vector of Vectors
+category:           Data, Data Structures
+description:        Please see the README on GitHub at <https://github.com/phlummox/storable-grid#readme>
+stability:          experimental  
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+ghc-options:
+    -Wall
+    -fwarn-tabs
+
+when:
+  - condition: impl(ghc >= 8.0)
+    ghc-options:        -Wredundant-constraints
+                        -Wno-type-defaults
+                        -Wcompat
+                        -Widentities
+                        -Wincomplete-record-updates
+                        -Wincomplete-uni-patterns
+                        -Wno-name-shadowing
+                        -Wextra
+
+  - condition: impl(ghc >= 8.2)
+    ghc-options:        -fhide-source-paths
+
+  - condition: impl(ghc >= 8.4)
+    ghc-options:        -Wmissing-export-lists
+                        -Wpartial-fields
+
+  - condition: impl(ghc >= 8.8)
+    ghc-options:        -Wmissing-deriving-strategies
+
+
+
+library:
+  source-dirs: src
+  exposed-modules:
+  - Data.Grid.Storable
+  - Data.Grid.Storable.Internal
+  dependencies:
+  - base >=4.7 && <5
+  - vector
+  - deepseq
+
+tests:
+  storable-grid-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - base
+    - storable-grid
+    - hspec
+    - QuickCheck
+    - binary
+    - bytestring
+    - crc
+    - vector
+
