@@ -3,8 +3,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE TypeFamilies #-}
-
-{-# LANGUAGE BangPatterns #-}
+{-# LANGUAGE CPP #-}
 
 {- |
 
@@ -16,7 +15,7 @@ Use case:
 * Before disposing of it, it would be convenient to treat
   it as a vector of vectors (perhaps for inspecting contents).
 * Also, I just wanted to see what's involved in creating
-  a 'Vector' instance.
+  a Vector instance.
 
 The resulting 'Grid' isn't an especially _good_ instance
 of a Vector -- many operations on the 'top-level' vector
@@ -61,7 +60,7 @@ module Data.Grid.Storable
   , reverse
 
   -- * Raw pointers
-  , unsafeFromForeignPtr0
+  , unsafeToForeignPtr0
   )
 
   where
@@ -69,6 +68,14 @@ module Data.Grid.Storable
 import Control.Monad
 import Control.DeepSeq
 import Control.Exception
+
+#if !MIN_VERSION_base(4,11,0)
+import Data.Monoid
+#endif
+
+#if !MIN_VERSION_base(4,8,0)
+import Data.Functor( (<$>) )
+#endif
 
 import qualified Data.Vector as V
 import qualified Data.Vector.Storable as VS
@@ -83,9 +90,9 @@ import System.IO.Unsafe
 
 import qualified Data.Grid.Storable.Internal as I
 
-
 type InternalGrid = I.Grid
 
+-- | A vector-of-vector view of a block foreign contiguous data
 type Grid a = InternalGrid a (VS.Vector a)
 
 {-# ANN module ("HLint: ignore Eta reduce"::String) #-}
@@ -125,20 +132,19 @@ toList ::
 toList grid = do
   let
       vecs = map VS.convert $ I.toList grid
-      fptr = unsafeFromForeignPtr0 grid
+      fptr = unsafeToForeignPtr0 grid
   vecs <- evaluate $ force vecs
   touchForeignPtr fptr
   return vecs
 
 
--- | /O(1)/ Create a vector from a 'ForeignPtr' and a length.
+-- | O(1) Yield the underlying 'ForeignPtr'.
 --
--- It is assumed the pointer points directly to the data (no offset).
--- Use `unsafeFromForeignPtr` if you need to specify an offset.
+-- You can assume the pointer points directly to the data (no offset).
 --
--- The data may not be modified through the 'ForeignPtr' afterwards.
-unsafeFromForeignPtr0 :: Grid el -> ForeignPtr el
-unsafeFromForeignPtr0 (I.Grid _ ptr) = ptr
+-- The data may not be modified through the 'ForeignPtr'.
+unsafeToForeignPtr0 :: Grid el -> ForeignPtr el
+unsafeToForeignPtr0 (I.Grid _ ptr) = ptr
 
 
 

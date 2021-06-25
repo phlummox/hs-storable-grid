@@ -11,3 +11,5 @@ promises to support.
 Most documentation is in the src/Data/Grid/Storable.hs file,
 and the tests/ directory gives some sample usage.
 
+Should work with Stack LTS 3 and onward.
+

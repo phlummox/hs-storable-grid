@@ -5,6 +5,7 @@ maintainer:         hs-storable-grid@phlummox.dev
 copyright:          2021 phlummox
 license:            BSD2
 github:             phlummox/hs-storable-grid
+tested-with:        GHC == 7.10.2, GHC == 8.0.1, GHC == 8.8.4
 
 synopsis:           Contiguous blocks of Storables, represented as a Vector of Vectors
 category:           Data, Data Structures
@@ -65,7 +66,7 @@ tests:
     - storable-grid
     - hspec
     - QuickCheck
-    - binary
+    - binary >= 0.8.3.0
     - bytestring
     - crc
     - vector

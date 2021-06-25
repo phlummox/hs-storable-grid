@@ -1,10 +1,11 @@
 
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleInstances #-}
-
-{-# OPTIONS_GHC -Wno-unused-top-binds #-}
-
 {-# LANGUAGE CPP #-}
+
+#if __GLASGOW_HASKELL__ > 710
+{-# OPTIONS_GHC -Wno-unused-top-binds #-}
+#endif
 
 {- |
 
@@ -36,7 +37,11 @@ instance G.MVector (MGrid el) a where
   basicOverlaps _ _         = error "can't make Grids mutable"
 
   basicUnsafeNew _          = error "can't make Grids mutable"
+
+#if MIN_VERSION_vector(0,11,0)
   basicInitialize _         = error "can't make Grids mutable"
+#endif
+
   basicUnsafeReplicate _ _  = error "can't make Grids mutable"
   basicUnsafeRead _ _       = error "can't make Grids mutable"
   basicUnsafeWrite _ _ _    = error "can't make Grids mutable"

@@ -1,11 +1,24 @@
 
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE CPP #-}
 
+#if __GLASGOW_HASKELL__ > 710
 {-# OPTIONS_GHC -Wno-missing-export-lists #-}
+#endif
+
+{- |
+
+Internal bits and pieces. The actual 'Grid' data structure
+is defined here, and various Vector operations.
+
+Not intended for public consumption; use "Data.Grid.Storable"
+instead.
+
+-}
 
 module Data.Grid.Storable.Internal
   where
@@ -43,13 +56,13 @@ import Data.Grid.Storable.Mutable
 {-# ANN module ("HLint: ignore Use camelCase"::String) #-}
 {-# ANN module ("HLint: ignore Eta reduce"::String) #-}
 
-
+-- | convert an offset to an (x,y) pair
 offset_to_coord :: Integral a => (a, b) -> a -> (a, a)
 offset_to_coord (w,_h) n = swap $ divMod n w
 {-# INLINEABLE offset_to_coord #-}
 
 
--- height must be > 0
+-- | convert an (x,y) pair to an offset
 coord_to_offset :: Num a => (a, b) -> (a, a) -> a
 coord_to_offset (w,_h) (x,y) = y * w + x
 {-# INLINEABLE coord_to_offset #-}
@@ -262,7 +275,14 @@ reverse = G.reverse
 -- Conversions - Lists
 -- ------------------------
 
--- | /O(n)/ Convert (v el) vector to (v el) list
+-- | /O(n)/ Convert (v el) vector to (v el) list.
+--
+-- Be very cautious about using this. If the underlying
+-- 'ForeignPtr' goes out of scope and gets garbage-collected,
+-- then the data it points to may get freed, meaning all
+-- the data in the vectors returned by this function is
+-- probably invalid. Probably you should use the version in "Data.Grid.Storable"
+-- instead.
 toList :: (Grid el) (v el) -> [v el]
 {-# INLINE toList #-}
 toList = G.toList

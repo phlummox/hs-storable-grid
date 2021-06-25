@@ -1,8 +1,11 @@
+
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE CPP #-}
 
+#if __GLASGOW_HASKELL__ > 710
 {-# OPTIONS_GHC -Wno-incomplete-uni-patterns #-}
-
+#endif
 
 module Data.Grid.Storable.InternalSpec (main, spec) where
 
