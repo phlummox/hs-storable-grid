@@ -13,7 +13,7 @@
 {- |
 
 Internal bits and pieces. The actual 'Grid' data structure
-is defined here, and various Vector operations.
+is defined here, and various Vector operations on it.
 
 Not intended for public consumption; use "Data.Grid.Storable"
 instead.
@@ -186,7 +186,7 @@ unsafeLast = G.unsafeLast
 -- Extracting subvectors (slicing)
 -- -------------------------------
 
--- | /O(1)/ Yield (v el) slice of the vector without copying it. The vector must
+-- | /O(1)/ Yield a slice of the vector without copying it. The vector must
 -- contain at least @i+n@ elements.
 slice :: Int   -- ^ @i@ starting index
                  -> Int   -- ^ @n@ length
@@ -229,7 +229,7 @@ splitAt :: Int -> (Grid el) (v el) -> ((Grid el) (v el), (Grid el) (v el))
 splitAt = G.splitAt
 
 
--- | /O(1)/ Yield (v el) slice of the vector without copying. The vector must
+-- | /O(1)/ Yield a slice of the vector without copying. The vector must
 -- contain at least @i+n@ elements but this is not checked.
 unsafeSlice :: Int   -- ^ @i@ starting index
                        -> Int   -- ^ @n@ length
@@ -266,7 +266,7 @@ unsafeDrop = G.unsafeDrop
 -- Permutations
 -- ------------
 
--- | /O(n)/ Reverse (v el) vector
+-- | /O(n)/ Reverse a vector
 reverse :: (Grid el) (v el) -> (Grid el) (v el)
 {-# INLINE reverse #-}
 reverse = G.reverse
@@ -275,7 +275,7 @@ reverse = G.reverse
 -- Conversions - Lists
 -- ------------------------
 
--- | /O(n)/ Convert (v el) vector to (v el) list.
+-- | /O(n)/ Convert a vector to a list.
 --
 -- Be very cautious about using this. If the underlying
 -- 'ForeignPtr' goes out of scope and gets garbage-collected,

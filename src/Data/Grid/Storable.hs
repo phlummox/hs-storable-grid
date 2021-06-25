@@ -13,7 +13,7 @@ Use case:
   with in C or C++ or some other foreign language
 * It represents a 2D grid
 * Before disposing of it, it would be convenient to treat
-  it as a vector of vectors (perhaps for inspecting contents).
+  it as a 'V.Vector' of vectors (perhaps for inspecting contents).
 * Also, I just wanted to see what's involved in creating
   a Vector instance.
 
@@ -98,9 +98,10 @@ type Grid a = InternalGrid a (VS.Vector a)
 {-# ANN module ("HLint: ignore Eta reduce"::String) #-}
 {-# ANN module ("HLint: ignore Use camelCase"::String) #-}
 
--- | Convert a storable vec into vec-of-vecs format
--- thawing results in a copy, but has the advantage that
--- the source vector can safely be used again
+-- | Convert a storable 'VS.Vector' into vector-of-vectors view.
+-- Does a "thaw" of the original 'VS.Vector', which results in a full copy,
+-- being made, but has the advantage that
+-- the source vector can safely be used again after.
 --
 -- width and height must be > 0 or user error thrown.
 fromVector :: (Storable el) =>
@@ -125,7 +126,7 @@ fromVector w h vec = unsafePerformIO $  do
   where
     mk_row ptr = (`VS.unsafeFromForeignPtr0` w) <$> newForeignPtr_ ptr
 
--- | convert the Grid into a list of (plain, not storable)
+-- | convert the 'Grid' into a list of (plain, not storable)
 -- 'V.Vector's.
 toList ::
   (Storable a, NFData a) => Grid a -> IO [V.Vector a]
