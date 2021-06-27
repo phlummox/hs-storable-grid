@@ -1,0 +1,84 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: d399d64db7b64441e892273b8cbb627f13ba95f862d37f2983f3e974bd0b3861
+
+name:           storable-grid
+version:        0.1.0.0
+synopsis:       Contiguous blocks of Storables, represented as a Vector of Vectors
+description:    Please see the README on GitHub at <https://github.com/phlummox/storable-grid#readme>
+category:       Data, Data Structures
+stability:      experimental
+homepage:       https://github.com/phlummox/hs-storable-grid#readme
+bug-reports:    https://github.com/phlummox/hs-storable-grid/issues
+author:         phlummox
+maintainer:     hs-storable-grid@phlummox.dev
+copyright:      2021 phlummox
+license:        BSD2
+license-file:   LICENSE
+tested-with:    GHC == 7.10.2, GHC == 8.0.1, GHC == 8.8.4
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/phlummox/hs-storable-grid
+
+library
+  exposed-modules:
+      Data.Grid.Storable
+      Data.Grid.Storable.Internal
+  other-modules:
+      Data.Grid.Storable.Mutable
+      Paths_storable_grid
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -fwarn-tabs
+  build-depends:
+      base >=4.7 && <5
+    , deepseq
+    , vector
+  if impl(ghc >= 8.0)
+    ghc-options: -Wredundant-constraints -Wno-type-defaults -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wno-name-shadowing -Wextra
+  if impl(ghc >= 8.2)
+    ghc-options: -fhide-source-paths
+  if impl(ghc >= 8.4)
+    ghc-options: -Wmissing-export-lists -Wpartial-fields
+  if impl(ghc >= 8.8)
+    ghc-options: -Wmissing-deriving-strategies
+  default-language: Haskell2010
+
+test-suite storable-grid-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Data.Grid.Storable.InternalSpec
+      Data.Grid.Storable.TestUtils
+      Data.Grid.StorableSpec
+      Paths_storable_grid
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -fwarn-tabs -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      QuickCheck
+    , base
+    , binary >=0.8.3.0
+    , bytestring
+    , crc
+    , hspec
+    , storable-grid
+    , vector
+  if impl(ghc >= 8.0)
+    ghc-options: -Wredundant-constraints -Wno-type-defaults -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wno-name-shadowing -Wextra
+  if impl(ghc >= 8.2)
+    ghc-options: -fhide-source-paths
+  if impl(ghc >= 8.4)
+    ghc-options: -Wmissing-export-lists -Wpartial-fields
+  if impl(ghc >= 8.8)
+    ghc-options: -Wmissing-deriving-strategies
+  default-language: Haskell2010
